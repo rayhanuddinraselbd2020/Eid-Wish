@@ -1,0 +1,252 @@
+<!DOCTYPE html>
+<html lang="bn">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ঈদ শুভেচ্ছা - রায়হান উদ্দিন রাসেল</title>
+    <link href="https://fonts.googleapis.com/css2?family=Hind+Siliguri:wght@300;500;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --gold: #f1c40f;
+            --emerald: #064e3b;
+            --soft-white: #f8fafc;
+            --fb-color: #1877F2;
+            --wa-color: #25D366;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Hind Siliguri', sans-serif;
+        }
+
+        body {
+            background: #020617;
+            height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            overflow: hidden;
+            color: var(--soft-white);
+        }
+
+        #canvas {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            z-index: 0;
+        }
+
+        /* Entry Screen */
+        #entry-screen {
+            position: relative;
+            z-index: 10;
+            text-align: center;
+            background: rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(15px);
+            padding: 40px;
+            border-radius: 30px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            transition: 0.8s cubic-bezier(0.4, 0, 0.2, 1);
+            box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+        }
+
+        input {
+            background: rgba(255, 255, 255, 0.1);
+            border: 2px solid var(--gold);
+            padding: 12px 20px;
+            border-radius: 50px;
+            color: white;
+            font-size: 1.1rem;
+            outline: none;
+            text-align: center;
+            width: 260px;
+            margin: 20px 0;
+        }
+
+        .btn-start {
+            background: var(--gold);
+            color: #000;
+            padding: 12px 35px;
+            border: none;
+            border-radius: 50px;
+            font-weight: 700;
+            cursor: pointer;
+            transition: 0.3s;
+        }
+
+        /* Wish Card */
+        #wish-card {
+            display: none;
+            position: relative;
+            z-index: 10;
+            width: 90%;
+            max-width: 480px;
+        }
+
+        .card-content {
+            background: linear-gradient(145deg, #064e3b, #022c22);
+            padding: 40px 25px;
+            border-radius: 40px;
+            text-align: center;
+            border: 2px solid var(--gold);
+            box-shadow: 0 0 50px rgba(6, 78, 59, 0.6);
+        }
+
+        .moon {
+            font-size: 50px;
+            filter: drop-shadow(0 0 10px var(--gold));
+            margin-bottom: 15px;
+        }
+
+        h1 {
+            color: var(--gold);
+            font-size: 2.5rem;
+            margin-bottom: 5px;
+        }
+
+        .user-name {
+            font-size: 1.6rem;
+            color: #fff;
+            margin-bottom: 15px;
+            font-weight: 600;
+        }
+
+        .islamic-msg {
+            font-size: 1.05rem;
+            line-height: 1.7;
+            background: rgba(0, 0, 0, 0.3);
+            padding: 20px;
+            border-radius: 15px;
+            margin-bottom: 20px;
+        }
+
+        .sender-info {
+            font-size: 0.95rem;
+            color: var(--gold);
+            margin-top: 10px;
+            font-weight: 500;
+        }
+
+        /* Share Buttons */
+        .share-container {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+            margin-top: 25px;
+        }
+
+        .share-btn {
+            padding: 10px 20px;
+            border-radius: 30px;
+            text-decoration: none;
+            color: white;
+            font-size: 0.9rem;
+            font-weight: bold;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            transition: 0.3s;
+        }
+
+        .fb { background: var(--fb-color); }
+        .wa { background: var(--wa-color); }
+        
+        .share-btn:hover { transform: translateY(-3px); opacity: 0.9; }
+
+        .hidden { opacity: 0; transform: scale(0.8); pointer-events: none; }
+    </style>
+</head>
+<body>
+
+    <canvas id="canvas"></canvas>
+
+    <div id="entry-screen">
+        <h3>আসসালামু আলাইকুম</h3>
+        <input type="text" id="nameInput" placeholder="এখানে তোমার নাম লিখুন..." maxlength="20">
+        <br>
+        <button class="btn-start" onclick="generateWish()">ক্লিক করো</button>
+    </div>
+
+    <div id="wish-card">
+        <div class="card-content">
+            <div class="moon">🌙</div>
+            <h1>ঈদ মোবারক</h1>
+            <div class="user-name" id="displayName"></div>
+            
+            <div class="islamic-msg">
+                "আল্লাহর রহমত ও বরকত আপনার জীবনের প্রতিটি মুহূর্তে ছড়িয়ে পড়ুক। এই পবিত্র ঈদে আপনার সমস্ত দোয়া কবুল হোক এবং জীবন ভরে উঠুক অনাবিল শান্তিতে।" 
+            </div>
+
+            <div class="sender-info">
+                — শুভেচ্ছান্তে: <b>রায়হান উদ্দিন রাসেল</b>
+            </div>
+
+            <div class="share-container">
+                <a href="#" id="fbShare" class="share-btn fb" onclick="shareFB()">Facebook</a>
+                <a href="#" id="waShare" class="share-btn wa" onclick="shareWA()">WhatsApp</a>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Particles Effect
+        const canvas = document.getElementById('canvas');
+        const ctx = canvas.getContext('2d');
+        canvas.width = window.innerWidth;
+        canvas.height = window.innerHeight;
+        let particles = [];
+        class Particle {
+            constructor() {
+                this.x = Math.random() * canvas.width;
+                this.y = Math.random() * canvas.height;
+                this.size = Math.random() * 2 + 1;
+                this.speedX = Math.random() * 1 - 0.5;
+                this.speedY = Math.random() * 1 - 0.5;
+            }
+            update() {
+                this.x += this.speedX; this.y += this.speedY;
+                if (this.x > canvas.width) this.x = 0;
+                if (this.y > canvas.height) this.y = 0;
+            }
+            draw() {
+                ctx.fillStyle = 'rgba(241, 196, 15, 0.4)';
+                ctx.beginPath(); ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2); ctx.fill();
+            }
+        }
+        function init() { for (let i = 0; i < 80; i++) particles.push(new Particle()); }
+        function animate() {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            particles.forEach(p => { p.update(); p.draw(); });
+            requestAnimationFrame(animate);
+        }
+        init(); animate();
+
+        // App Logic
+        function generateWish() {
+            const name = document.getElementById('nameInput').value.trim();
+            if (name === "") { alert("নাম লিখুন!"); return; }
+
+            document.getElementById('entry-screen').classList.add('hidden');
+            
+            setTimeout(() => {
+                document.getElementById('entry-screen').style.display = 'none';
+                const card = document.getElementById('wish-card');
+                card.style.display = 'block';
+                document.getElementById('displayName').innerText = name;
+            }, 600);
+        }
+
+        function shareWA() {
+            const msg = `ঈদ মোবারক! রায়হান উদ্দিন রাসেল আপনাকে একটি ঈদের শুভেচ্ছা কার্ড পাঠিয়েছেন। দেখুন এখানে: ${window.location.href}`;
+            window.open(`https://api.whatsapp.com/send?text=${encodeURIComponent(msg)}`, '_blank');
+        }
+
+        function shareFB() {
+            const url = window.location.href;
+            window.open(`https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(url)}`, '_blank');
+        }
+    </script>
+</body>
+</html>
